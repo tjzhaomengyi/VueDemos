@@ -1,6 +1,7 @@
 //路由页面配置
 import ShowBlogs from "./components/ShowBlogs";
 import AddBlog from "./components/AddBlog";
+import SingleBlog from "./components/SingleBlog";
 
 export default[
   {

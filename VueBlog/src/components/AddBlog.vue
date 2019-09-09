@@ -58,16 +58,31 @@
                 submmitted: false
             }
         },
+      //todo:
         methods: {
             post: function () {
-                this.$http.post("http://jsonplaceholder.typicode.com/posts", {
-                    title: this.blog.title,
-                    body: this.blog.content,
-                    userId: 1
-                }).then(function (data) {
-                    console.log(data)
-                    this.submmitted = true
-                })
+                // this.$http.post("http://jsonplaceholder.typicode.com/posts", this.blog).then(function (data) {
+                //     console.log(data)
+                //     this.submmitted = true
+                // })
+
+                // const query = Bmob.query("articles")
+                // query.set("title",test)
+                // query.save().then(res => {
+                //   console.log(res)
+                // }).catch(err => {
+                //   console.log(err)
+                // })
+              
+
+
+              const query = Bmob.Query('articles')
+              query.set("blog",this.blog)
+              query.save().then(res => {
+                console.log(res)
+              }).catch(err => {
+                console.log(err)
+              })
             }
         }
     }

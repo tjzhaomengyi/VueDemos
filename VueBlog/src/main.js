@@ -5,12 +5,17 @@ import App from './App'
 import VueResource from 'vue-resource'
 import VueRouter from 'vue-router'
 import Routes from './routes'
-
+// import './assets/js/key'
+import Bmob from "hydrogen-js-sdk";
 
 Vue.config.productionTip = false
 
 Vue.use(VueResource)
 Vue.use(VueRouter)
+
+Bmob.initialize("b2972211b76d7471","123321");
+// 挂载到全局使用s
+Vue.prototype.Bmob = Bmob
 
 //自定义指令,全局，标题颜色
 // Vue.directive('rainbow',{
