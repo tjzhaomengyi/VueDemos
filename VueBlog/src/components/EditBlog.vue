@@ -75,9 +75,15 @@
         query.get(this.id).then(res =>{
         // query.save().then(res => {
           res.set("blog",this.blog)
-          res.save()
-          console.log(res)
-          alert("成功向Bmob Baas平台中添加数据")
+          res.save().then(res=>{  //这里也要遵守es6的语法，否则这个submitted的变量会提示找不到，必须加上catch
+            console.log(res)
+            alert("成功向Bmob Baas平台中添加数据")
+            //todo:
+            this.submmitted = true
+          }).catch(err=>{
+            console.log("更新失败")
+          })
+
         }).catch(err => {
           alert("向Bmob Baas平台中添加数据失败！！")
           console.log(err)
