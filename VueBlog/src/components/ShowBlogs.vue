@@ -10,7 +10,7 @@
         <h2 v-rainbow>{{blog.title | toUppercase}}</h2>
       </router-link>
       <!--      <h2>{{blog.title}}</h2>-->
-      <article>{{blog.body | snippet}}</article>
+      <article>{{blog.content | snippet}}</article>
     </div>
   </div>
 </template>
@@ -29,10 +29,25 @@
       //todo:
       // this.$http.get("https://jsonplaceholder.typicode.com/posts")
       //使用bmob baas查询
-      const query = Bmob.Query('articles')
-      query.find().then(res => {
-        console.log(res)
+      var query = Bmob.Query("articles")
+      // query.select("title")
+      // console.log(query.statTo("title"))
+      query.find().then(res=>{//通过Bmob中articles表中的id查询出每个blog，每个blog有对应的ObjectID
+        // console.log(res.blog.title)
+        return res
+      }).catch(error=>{
+        console.log(error)
+      }).then(data=>{
+        var blogsArray=[];
+        for(let key in data){
+          console.log(data[key].objectId)
+          data[key].blog.id = data[key].objectId
+          blogsArray.push(data[key].blog)//把bmob中拿到的blogs放到本地的blogsArray中,这里一定要放blog对象
+        }
+        console.log(blogsArray)
+        this.blogs = blogsArray
       })
+
 
       // this.$http.get('static/posts.json')//获取本地json数据，json必须放在static目录下面
       //   .then(function (data) {

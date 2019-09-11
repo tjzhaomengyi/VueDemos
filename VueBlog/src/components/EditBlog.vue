@@ -1,6 +1,6 @@
 <template>
-  <div id="add-blog">
-    <h2>添加博客</h2>
+  <div id="edit-blog">
+    <h2>修改博客</h2>
     <form v-if="!submmitted">
       <label>博客标题</label>
       <input type="text" v-model="blog.title" required/>
@@ -22,7 +22,7 @@
         <option v-for="author in authors">{{author}}</option>
       </select>
 
-      <button v-on:click.prevent="post">添加博客</button>
+      <button v-on:click.prevent="post">修改博客</button>
     </form>
 
     <div v-if="submmitted">
@@ -44,51 +44,62 @@
 </template>
 
 <script>
-    export default {
-        name: 'add-blog',
-        data() {
-            return {
-                blog: {
-                    title: "",
-                    content: "",
-                    categories: [],
-                    author: ""
-                },
-                authors: ["aaa", "bbb", "cccc"],
-                submmitted: false
-            }
+  export default {
+    name: 'edit-blog',
+    data() {
+      return {
+        id:this.$route.params.id,
+        blog: {
+          // title: "",
+          // content: "",
+          // categories: [],
+          // author: ""
         },
-      //todo:
-        methods: {
-            post: function () {
-                // this.$http.post("http://jsonplaceholder.typicode.com/posts", this.blog).then(function (data) {
-                //     console.log(data)
-                //     this.submmitted = true
-                // })
+        authors: ["aaa", "bbb", "cccc"],
+        submmitted: false,
+        query :Bmob.Query("articles")
+      }
+    },
 
-                // const query = Bmob.query("articles")
-                // query.set("title",test)
-                // query.save().then(res => {
-                //   console.log(res)
-                // }).catch(err => {
-                //   console.log(err)
-                // })
+    created(){
 
+      this.fetchData()
 
+    },
+    //todo:
+    methods: {
+      post: function () {
 
-              const query = Bmob.Query('articles')
-              query.set("blog",this.blog)
-              query.save().then(res => {
-                console.log(res)
-                alert("成功向Bmob Baas平台中添加数据")
-                this.submmitted = true
-              }).catch(err => {
-                alert("向Bmob Baas平台中添加数据失败！！")
-                console.log(err)
-              })
-            }
-        }
+        const query = Bmob.Query('articles')
+        // 修改边间的blog
+        query.get(this.id).then(res =>{
+        // query.save().then(res => {
+          res.set("blog",this.blog)
+          res.save()
+          console.log(res)
+          alert("成功向Bmob Baas平台中添加数据")
+        }).catch(err => {
+          alert("向Bmob Baas平台中添加数据失败！！")
+          console.log(err)
+        })
+      },
+
+      fetchData:function(){
+        // console.log(this.id)
+        this.query.get(this.id)
+          .then(function (data) {
+            // console.log(data.blog)
+            return data.blog //这里是如何从bmob的后台数据中传给本地Blog对象
+          }).catch(error =>{ //这里处理promise的变量，必须加上catch，否则，在then中无法拿到this.blog对象，接不到
+          console.log(error)
+        }).then(data=>{
+          this.blog = data
+          console.log(this.blog)
+        })
+      }
     }
+
+  }
 </script>
 
 <style scoped>
